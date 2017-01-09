@@ -23,6 +23,7 @@ def tree(dir, tab, firstLevel=False):
         if isdir(pathFolder):
             tree(pathFolder, tab)
         i = i + 1
+
 if __name__ == "__main__":
     #format sample: python PTree.py C:\Users
     dir = argv[1]

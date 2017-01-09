@@ -355,8 +355,7 @@ def createRanking(data):
                        if len(groupedRank[i]) and groupedRank[i][j][1] != '' ]) , \
                   max([(groupedRank[i][k][0],groupedRank[i][k][2]) for k in range(len(groupedRank[i]))], key= lambda x: x[1])
                   )
-             for i in groupedRank.keys() if len(groupedRank[i]) > 0
-             }
+             for i in groupedRank.keys() if len(groupedRank[i]) > 0}
 
 def createRankingByAppearances(data):
     return sorted(createRanking(data).items(), key=lambda (k, v): v[0], reverse=True)
@@ -368,7 +367,7 @@ def tagCloud(data):
     allWords = [(data[i]['plot_keywords']).split('|') for i in range(len(data))]
     allWordsFlattened = __flattenList(allWords)
     tagCloudItems = {allWordsFlattened[i]: allWordsFlattened.count(allWordsFlattened[i]) \
-                   for i in range(len(allWordsFlattened)) if allWordsFlattened[i] != ''}
+                    for i in range(len(allWordsFlattened)) if allWordsFlattened[i] != ''}
     return sorted(tagCloudItems.items(), reverse = True, key=lambda x: int(x[1]))
 
 
@@ -380,18 +379,16 @@ def gorssByYear(data, reverse= True):
     groupedByYear = {}
     for genre, gross, year in splitedGenres:
         groupedByYear.setdefault(year, []).extend([(genre, gross)])
-    return  { i : ( next(iter(sorted(filter(lambda x: x[1] != '', groupedByYear[i]),
-                                      reverse= reverse, key=lambda x: int(x[1]))), None)
-
-                )
-                for i in groupedByYear.keys() if len(groupedByYear[i]) > 0
+    return  { i : (next(iter(sorted(filter(lambda x: x[1] != '', groupedByYear[i]),
+                                    reverse= reverse, key=lambda x: int(x[1]))), None)
+                )for i in groupedByYear.keys() if len(groupedByYear[i]) > 0
             }
 
 def genresLikes(data):
     likesByGenre = distinctColumn(data, 'movie_title')
     likesByGenre = map(lambda x: (x['genres'].split('|'), x['movie_facebook_likes']), likesByGenre)
     likesByGenre = [(likesByGenre[i][0][j], likesByGenre[i][1]) for i in range(len(likesByGenre)) for j in
-             range(len(likesByGenre[i][0]))]
+                    range(len(likesByGenre[i][0]))]
     groupByGenre = {}
     for genre, likes in likesByGenre:
         groupByGenre.setdefault(genre, []).extend([likes])

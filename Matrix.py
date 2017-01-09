@@ -4,7 +4,7 @@ class Matrix(object):
     def __init__(self, rows):
         self.rows = rows
 
-    #PRIVATE OPS
+    # PRIVATE OPS
 
     def __reduceMatrix(self, mat, i, j):
         return [row[:j] + row[j + 1:] for row in (mat[:i] + mat[i + 1:])]
@@ -16,6 +16,7 @@ class Matrix(object):
             return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0]
         else:
             return sum([((-1) ** col) * mat[0][col] * self.__getDeterminant(self.__reduceMatrix(mat, 0, col)) for col in range(len(mat))])
+
     def __getAdj(self, mat):
         if len(mat) == 1:
             return mat[0][0]
