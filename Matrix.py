@@ -1,12 +1,23 @@
 from __future__ import division
 
 class Matrix(object):
+
     def __init__(self, rows):
         self.rows = rows
 
-    # PRIVATE OPS
+    '''Aux methods '''
 
     def __reduceMatrix(self, mat, i, j):
+        '''Reduce the matrix removing the current row and column.
+        Args:
+            mat: The matrix.
+            i: Row number.
+            j: Column number
+
+        Returns:
+            A reduced matrix.
+        '''
+
         return [row[:j] + row[j + 1:] for row in (mat[:i] + mat[i + 1:])]
 
     def __getDeterminant(self, mat):
@@ -66,10 +77,24 @@ class Matrix(object):
         return result
 
     def getMatrixFromColumn(self, initialX, initialY, height, width):
-        selectedRows = list(range(initialX, initialX + height))
-        rowFilteredMat = Matrix(self.getRows(selectedRows))
-        selectedColumns = list(range(initialY, initialY + width))
-        return Matrix(rowFilteredMat.getColumns(selectedColumns)).trasp()
+        '''Get matrix by column.
+        Args:
+            initialX: row of the top left element in the matrix.
+            initialY: column of the top left element in the matrix..
+            height: height of the desired matrix.
+            width: with of the desired matrix.
+
+        Returns:
+            a matrix with dimensions <height, width> and top left item in <initialX, initialY>.
+        '''
+
+        if (len(self.rows) == 0) or (initialX + height > len(self.rows)) or (initialY + width > len(self.rows[0])):
+            raise Exception('Wrong matrix dimensions.')
+        else:
+            selectedRows = list(range(initialX, initialX + height))
+            rowFilteredMat = Matrix(self.getRows(selectedRows))
+            selectedColumns = list(range(initialY, initialY + width))
+            return Matrix(rowFilteredMat.getColumns(selectedColumns)).trasp()
 
     def __str__(self):
         return '\n'.join([' '.join([str(item) for item in row]) for row in self.rows])

@@ -4,8 +4,6 @@ from os import listdir, sep
 from os.path import isdir
 from sys import argv
 
-
-
 def tree(dir, tab, firstLevel=False):
     files = listdir(dir)
     if firstLevel:

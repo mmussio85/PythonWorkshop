@@ -4,6 +4,13 @@ reader = csv.DictReader(open('movie_metadata.csv'))
 data = list(reader)
 
 def wrapHtml(fn):
+    '''Wraps the entire html doc and export it in a file.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html file with the results of each query.
+    '''
+
     def wrapped():
         html =  '<html><body>'+ fn() +'</body></html>'
         with open('etl.html', 'w') as f:
@@ -202,7 +209,7 @@ def wrapTableDirectorsReputiation(fn):
         rowMovie = ''
         start_time = time.time()
         directors = fn()
-        tagInit = '<p>Top Directors reputation</b></p><table><tr><th>Director Name</th><th>Likes</th></tr >'
+        tagInit = '<p><b>TOP DIRECTORS REPUTATION</b></p><table><tr><th>Director Name</th><th>Likes</th></tr >'
         for director in directors:
             rowMovie += '<tr><td>' + director[0] + '</td>' + '<td>' + str(director[1]) + '</td>'
         tagEnd = '<table><br/><p>Elapsed Time: '+ str(round(time.time() - start_time, 2)) +'</p><br/>'
@@ -293,11 +300,28 @@ def buildBody():
     + directorsRank()
 
 def groupByColumn(data, columnName):
+    '''Wraps the entire html doc and export it in a file.
+    Args:
+        data: The data read from the csv file.
+        columnName: The column name used for grouping by.
+    Returns:
+        data grouped by columnName.
+    '''
+
     selectDistinct = distinctColumn(data, 'movie_title')
     columnValues = [selectDistinct[i][columnName] for i in range(len(selectDistinct))]
     return {selectDistinct[i][columnName]: columnValues.count(selectDistinct[i][columnName]) for i in range(len(selectDistinct))}
 
 def distinctColumn(data, selectColumn, oneColumn = False):
+    '''Filters repeated data by using selectColumn(just used for movie_titles).
+    Args:
+        data: The data read from the csv file.
+        selectColumn: The column used for filtering repeated rows.
+        oneColumn: Indicates whether the entire row is retrieved or just the selected column .
+    Returns:
+        data without repeated rows.
+    '''
+
     columnValues = [data[i][selectColumn] for i in range(len(data))]
     if not oneColumn:
         return [data[i] for i in range(len(columnValues)) if data[i][selectColumn] not in columnValues[i + 1:]]
@@ -322,25 +346,14 @@ def getMoviesByYear(data, selectColumn, yearColumn):
     listYears =  sorted(groupByYear.items(), key = lambda x: int(x[1]))
     return (listYears[0], listYears[-1])
 
-def __flattenList(oldList):
-    flattened = []
-    for row in oldList:
-        for elem in row:
-            flattened.append(elem)
-    return flattened
-
-
-
-def __filterMoviesByActor(data, actorName):
-    moviesByActor = filter(lambda x: (x['actor_1_name'] == actorName or x['actor_2_name'] == actorName or x['actor_3_name'] == actorName) \
-                            and x['actor_1_facebook_likes'] != '' and x['actor_2_facebook_likes'] != ''\
-                            and x['actor_3_facebook_likes'] != '', data)
-    likesMainActor = sum([int(moviesByActor[i]['actor_1_facebook_likes']) for i in range(len(moviesByActor)) if moviesByActor[i]['actor_1_name'] == actorName])
-    likesSecondActor = sum([int(moviesByActor[i]['actor_2_facebook_likes']) for i in range(len(moviesByActor)) if moviesByActor[i]['actor_2_name'] == actorName])
-    likesThirdActor = sum([int(moviesByActor[i]['actor_3_facebook_likes']) for i in range(len(moviesByActor)) if moviesByActor[i]['actor_3_name'] == actorName])
-    return likesMainActor + likesSecondActor + likesThirdActor
-
 def createRanking(data):
+   '''Ranking actors showing appereances, facebook likes and best movie.
+   Args:
+        data: The data read from the csv file.
+   Returns:
+        A dictionary containing for each actor the info mentioned in the method description.
+   '''
+
    rank = distinctColumn(data, 'movie_title')
    rank = map(lambda x: (x['actor_1_name'], x['actor_2_name'], x['actor_3_name'], x['movie_title'], \
                          x['actor_1_facebook_likes'], x['actor_2_facebook_likes'], x['actor_3_facebook_likes'], \
@@ -350,12 +363,13 @@ def createRanking(data):
    groupedRank = {}
    for actorName, movieTitle, facebookLikes, score in rank:
        groupedRank.setdefault(actorName, []).extend([(movieTitle , facebookLikes , score)])
-   return {i : (len(groupedRank[i]), \
+   return { i : (len(groupedRank[i]), \
                   sum([int(groupedRank[i][j][1]) for j in range(len(groupedRank[i])) \
                        if len(groupedRank[i]) and groupedRank[i][j][1] != '' ]) , \
                   max([(groupedRank[i][k][0],groupedRank[i][k][2]) for k in range(len(groupedRank[i]))], key= lambda x: x[1])
                   )
-             for i in groupedRank.keys() if len(groupedRank[i]) > 0}
+             for i in groupedRank.keys() if len(groupedRank[i]) > 0
+        }
 
 def createRankingByAppearances(data):
     return sorted(createRanking(data).items(), key=lambda (k, v): v[0], reverse=True)
@@ -364,14 +378,25 @@ def createRankingByLikes(data):
     return sorted(createRanking(data).items(), key=lambda (k, v): v[1], reverse=True)
 
 def tagCloud(data):
-    allWords = [(data[i]['plot_keywords']).split('|') for i in range(len(data))]
-    allWordsFlattened = __flattenList(allWords)
-    tagCloudItems = {allWordsFlattened[i]: allWordsFlattened.count(allWordsFlattened[i]) \
-                    for i in range(len(allWordsFlattened)) if allWordsFlattened[i] != ''}
-    return sorted(tagCloudItems.items(), reverse = True, key=lambda x: int(x[1]))
-
+    allWords = map(lambda x: (x['plot_keywords']).split('|'), data)
+    allWords = reduce(list.__add__, allWords)
+    dicTagWords = {}
+    for word in allWords:
+        if dicTagWords.__contains__(word):
+            dicTagWords[word] += 1
+        else:
+            dicTagWords.__setitem__(word, 1)
+    return sorted(dicTagWords.items(), reverse=True, key=lambda x: int(x[1]))
 
 def gorssByYear(data, reverse= True):
+    '''For each genre, get its gross year by year.
+    Args:
+        data: The data read from the csv file.
+        reverse: Reverse the order of the results based on Gross
+    Returns:
+        A dictionary containing for each genre they gross by year.
+    '''
+
     grossGenre = distinctColumn(data, 'movie_title')
     grossGenre = map(lambda x: (x['genres'].split('|'), x['title_year'], x['gross']), grossGenre)
     splitedGenres = [(grossGenre[i][0][j], grossGenre[i][2], grossGenre[i][1]) for i in range(len(grossGenre)) \
@@ -379,16 +404,18 @@ def gorssByYear(data, reverse= True):
     groupedByYear = {}
     for genre, gross, year in splitedGenres:
         groupedByYear.setdefault(year, []).extend([(genre, gross)])
-    return  { i : (next(iter(sorted(filter(lambda x: x[1] != '', groupedByYear[i]),
-                                    reverse= reverse, key=lambda x: int(x[1]))), None)
-                )for i in groupedByYear.keys() if len(groupedByYear[i]) > 0
-            }
+    return  { int(i) : ( next(iter(sorted(filter(lambda x: x[1] != '', groupedByYear[i]),
+                                      reverse= reverse, key=lambda x: int(x[1]))), None)
+
+                )
+                for i in groupedByYear.keys() if len(groupedByYear[i]) > 0 and i != ''
+              }
 
 def genresLikes(data):
     likesByGenre = distinctColumn(data, 'movie_title')
     likesByGenre = map(lambda x: (x['genres'].split('|'), x['movie_facebook_likes']), likesByGenre)
     likesByGenre = [(likesByGenre[i][0][j], likesByGenre[i][1]) for i in range(len(likesByGenre)) for j in
-                    range(len(likesByGenre[i][0]))]
+             range(len(likesByGenre[i][0]))]
     groupByGenre = {}
     for genre, likes in likesByGenre:
         groupByGenre.setdefault(genre, []).extend([likes])
@@ -404,7 +431,6 @@ def directorsReputation(data):
     result = {i: sum([int(groupByDirector[i][j]) for j in range(len(groupByDirector[i])) if groupByDirector[i][j] != '']) for i
               in groupByDirector.keys()}
     return sorted(result.items(), reverse=True, key=lambda x: int(x[1]))[:5]
-
 
 if __name__ == "__main__":
     buildBody()

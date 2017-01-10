@@ -1,4 +1,5 @@
 class Set(object):
+
     def __init__(self, elements):
         self.elements = list()
         for i in elements:
@@ -51,4 +52,4 @@ if __name__ == "__main__":
     print newSet.intersection(newSetB)
     print newSetC.isIncluded(newSetB)
     print newSet.prodCart(newSetB)
-    print newSetB.pot()
+    print len(newSetB.pot())
