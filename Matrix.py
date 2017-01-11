@@ -62,6 +62,13 @@ class Matrix(object):
                 return self.adj().scalar(1 / self.determinant())
 
     def getRows(self, listRows):
+        '''Get rows without repetition.
+        Args:
+            listRows: the rows to be retrieved
+        Returns:
+            a list of rows
+        '''
+
         result = list()
         for i in listRows:
             if self.rows[i - 1] not in result:
@@ -69,6 +76,13 @@ class Matrix(object):
         return result
 
     def getColumns(self, listColumns):
+        '''Get columns without repetition.
+        Args:
+            listColumns: the columns to be retrieved
+        Returns:
+            a list of columns
+        '''
+
         result = list()
         selectedColumns = [[row[j - 1] for row in self.rows ] for j in listColumns]
         for i in selectedColumns:
@@ -92,39 +106,9 @@ class Matrix(object):
             raise Exception('Wrong matrix dimensions.')
         else:
             selectedRows = list(range(initialX, initialX + height))
-            rowFilteredMat = Matrix(self.getRows(selectedRows))
+            rowFilteredMat = Matrix([self.rows[i - 1] for i in selectedRows ])
             selectedColumns = list(range(initialY, initialY + width))
-            return Matrix(rowFilteredMat.getColumns(selectedColumns)).trasp()
+            return Matrix([[rowFilteredMat.rows[i][j - 1] for j in selectedColumns ] for i in range(len(rowFilteredMat.rows))  ])
 
     def __str__(self):
         return '\n'.join([' '.join([str(item) for item in row]) for row in self.rows])
-
-
-if __name__ == "__main__":
-    matA = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    print matA
-    matB = Matrix([[2, -3, 8], [10, 11, 12], [3, 4, 5]])
-    matC = Matrix([[2, 1, 0], [1, -1, 1], [0, 2, -1]])
-
-    print matA.sum(matB)
-    print matA.scalar(3)
-    print matA.prod(matB)
-    print matA.trasp()
-    a = matB.determinant()
-    b = matA.adj()
-    print b
-    a = matC.inv()
-    print a.prod(matC)
-    matD = Matrix([[2, 1, 0], [1, -1, 1], [2, 1, 0]])
-    matD.getRows([1,2,3])
-    matE = Matrix([[2, 1, 1], [1, 1, 1], [2, 1, 1]])
-    print matE.getColumns([1, 2])
-    matF = Matrix([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10], \
-                   [11, 12, 13, 14, 15], [16, 17, 18, 19, 20], [21, 22, 23, 24, 25]])
-
-    print matF
-    print matF.getMatrixFromColumn(2,2,2,2)
-
-
-
-
