@@ -18,6 +18,13 @@ def wrapHtml(fn):
     return wrapped
 
 def wrapTableColor(fn):
+    '''Wraps the movie color table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         start_time = time.time()
         item = fn()
@@ -30,6 +37,13 @@ def wrapTableColor(fn):
     return wrapped
 
 def wrapTableDirectorMovies(fn):
+    '''Wraps the movie directors table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowDirector = ''
         start_time = time.time()
@@ -43,6 +57,13 @@ def wrapTableDirectorMovies(fn):
     return wrapped
 
 def wrapTableLessCriticism(fn):
+    '''Wraps the movie criticism table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -55,6 +76,13 @@ def wrapTableLessCriticism(fn):
     return wrapped
 
 def wrapTableMaxDuration(fn):
+    '''Wraps the movie criticism table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -67,6 +95,13 @@ def wrapTableMaxDuration(fn):
     return wrapped
 
 def wrapTableMostGrossMovies(fn):
+    '''Wraps the movie most gross table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -79,6 +114,13 @@ def wrapTableMostGrossMovies(fn):
     return wrapped
 
 def wrapTableLessGrossMovies(fn):
+    '''Wraps the movie less gross table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -91,6 +133,13 @@ def wrapTableLessGrossMovies(fn):
     return wrapped
 
 def wrapTableMostExpensiveMovies(fn):
+    '''Wraps the most expensive movies table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -103,6 +152,13 @@ def wrapTableMostExpensiveMovies(fn):
     return wrapped
 
 def wrapTableLessExpensiveMovies(fn):
+    '''Wraps the less expensive movies table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -115,6 +171,13 @@ def wrapTableLessExpensiveMovies(fn):
     return wrapped
 
 def wrapTableMaxAndMinMoviesReleases(fn):
+    '''Wraps the movies releases table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         start_time = time.time()
         tupleResult = fn()
@@ -126,6 +189,13 @@ def wrapTableMaxAndMinMoviesReleases(fn):
     return wrapped
 
 def wrapTableTagKeywords(fn):
+    '''Wraps the movie tags table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -138,6 +208,13 @@ def wrapTableTagKeywords(fn):
     return wrapped
 
 def wrapTableRankActorsByAppereances(fn):
+    '''Wraps the actor appereances table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -150,6 +227,13 @@ def wrapTableRankActorsByAppereances(fn):
     return wrapped
 
 def wrapTableRankActorsByLikes(fn):
+    '''Wraps the actor likes table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -162,6 +246,13 @@ def wrapTableRankActorsByLikes(fn):
     return wrapped
 
 def wrapTableMostGrossGenereByYear(fn):
+    '''Wraps the gross genre table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -178,6 +269,13 @@ def wrapTableMostGrossGenereByYear(fn):
     return wrapped
 
 def wrapTableLessGrossGenereByYear(fn):
+    '''Wraps the gross genre table.
+        Args:
+            fn: Inner function.
+        Returns:
+            an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -194,6 +292,13 @@ def wrapTableLessGrossGenereByYear(fn):
     return wrapped
 
 def wrapTableLikeByGenre(fn):
+    '''Wraps the genre likes table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -205,6 +310,13 @@ def wrapTableLikeByGenre(fn):
     return wrapped
 
 def wrapTableDirectorsReputiation(fn):
+    '''Wraps the director reputation table.
+    Args:
+        fn: Inner function.
+    Returns:
+        an html table with the results.
+    '''
+
     def wrapped():
         rowMovie = ''
         start_time = time.time()
@@ -329,6 +441,17 @@ def distinctColumn(data, selectColumn, oneColumn = False):
         return [data[i][selectColumn] for i in range(len(columnValues)) if data[i][selectColumn] not in columnValues[i + 1:]]
 
 def takeRowsByCondition(data, selectColumn, orderByColumn, takeNumber=None, reverse=False):
+    '''Take a Number of records according to certain condition
+    Args:
+        data: The data read from the csv file.
+        selectColumn: The column used for filtering repeated rows.
+        orderByColumn: te column used for ordering the result.
+        takeNumber: the number of records to be delivered.
+        reverse: Indicates the order of the results, True desc or False asc.
+    Returns:
+        A list of records containing The first 'takeNumber' elements.
+    '''
+
     selectDistinct = distinctColumn(data, selectColumn)
     if takeNumber:
         filteredOrderedList = sorted(filter(lambda x : x[orderByColumn] != '' and x[selectColumn] != '', selectDistinct), \
@@ -339,6 +462,13 @@ def takeRowsByCondition(data, selectColumn, orderByColumn, takeNumber=None, reve
     return [(filteredOrderedList[i][selectColumn], filteredOrderedList[i][orderByColumn])  for i in range(len(filteredOrderedList))]
 
 def getMoviesByYear(data, selectColumn, yearColumn):
+    '''Get the years with more and less movies
+       Args:
+            data: The data read from the csv file.
+       Returns:
+            A dictionary containing the years with more and less movies.
+    '''
+
     selectDistinct = distinctColumn(data, selectColumn)
     columnValues = [selectDistinct[i][yearColumn] for i in range(len(selectDistinct))]
     groupByYear = {selectDistinct[i][yearColumn]: columnValues.count(selectDistinct[i][yearColumn]) \
@@ -347,7 +477,7 @@ def getMoviesByYear(data, selectColumn, yearColumn):
     return (listYears[0], listYears[-1])
 
 def createRanking(data):
-   '''Ranking actors showing appereances, facebook likes and best movie.
+   '''Ranking actors showing appearances, facebook likes and best movie.
    Args:
         data: The data read from the csv file.
    Returns:
@@ -372,12 +502,33 @@ def createRanking(data):
         }
 
 def createRankingByAppearances(data):
+    '''Ranking actors showing ordered by appearances.
+    Args:
+        data: The data read from the csv file.
+    Returns:
+        A dictionary of actors ordered by appearances.
+    '''
+
     return sorted(createRanking(data).items(), key=lambda (k, v): v[0], reverse=True)
 
 def createRankingByLikes(data):
+    '''Ranking actors showing ordered by likes.
+    Args:
+        data: The data read from the csv file.
+    Returns:
+        A dictionary of actors ordered by likes.
+    '''
+
     return sorted(createRanking(data).items(), key=lambda (k, v): v[1], reverse=True)
 
 def tagCloud(data):
+    '''Keywords ordered by appearances for all of the movies.
+    Args:
+        data: The data read from the csv file.
+    Returns:
+        An ordered tag cloud that contains a count of appearances.
+    '''
+
     allWords = map(lambda x: (x['plot_keywords']).split('|'), data)
     allWords = reduce(list.__add__, allWords)
     dicTagWords = {}
@@ -392,7 +543,7 @@ def gorssByYear(data, reverse= True):
     '''For each genre, get its gross year by year.
     Args:
         data: The data read from the csv file.
-        reverse: Reverse the order of the results based on Gross
+        reverse: Reverse the order of the results.
     Returns:
         A dictionary containing for each genre they gross by year.
     '''
@@ -412,6 +563,13 @@ def gorssByYear(data, reverse= True):
               }
 
 def genresLikes(data):
+    '''Get all the likes by genre.
+    Args:
+        data: The data read from the csv file.
+    Returns:
+        A dictionary containing for each genre the likes they have.
+    '''
+
     likesByGenre = distinctColumn(data, 'movie_title')
     likesByGenre = map(lambda x: (x['genres'].split('|'), x['movie_facebook_likes']), likesByGenre)
     likesByGenre = [(likesByGenre[i][0][j], likesByGenre[i][1]) for i in range(len(likesByGenre)) for j in
@@ -419,10 +577,18 @@ def genresLikes(data):
     groupByGenre = {}
     for genre, likes in likesByGenre:
         groupByGenre.setdefault(genre, []).extend([likes])
-    result = { i : sum([int(groupByGenre[i][j]) for j in range(len(groupByGenre[i])) if groupByGenre[i][j] != '']) for i in groupByGenre.keys()}
+    result = { i : sum([int(groupByGenre[i][j]) for j in range(len(groupByGenre[i])) if groupByGenre[i][j] != ''])
+               for i in groupByGenre.keys()}
     return sorted(result.items(), reverse = True, key=lambda x: int(x[1]))[0]
 
 def directorsReputation(data):
+    '''Get the reputation for each director.
+    Args:
+        data: The data read from the csv file.
+    Returns:
+        An ordered dictionary containing for each director their reputation.
+    '''
+
     directorLikes = distinctColumn(data, 'movie_title')
     directorLikes = map(lambda x: (x['director_name'], x['director_facebook_likes']), directorLikes)
     groupByDirector = {}

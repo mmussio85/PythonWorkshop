@@ -4,7 +4,7 @@ class Matrix(object):
 
     def __init__(self, rows):
         self.rows = rows
-
+        self.__checkValidMatrix()
     '''Aux methods '''
 
     def __reduceMatrix(self, mat, i, j):
@@ -34,18 +34,30 @@ class Matrix(object):
         elif len(mat) > 1:
             return Matrix([[((-1) ** (col + row) ) * self.__getDeterminant(self.__reduceMatrix(mat, row, col)) for col in range(len(mat))] for row in range(len(mat)) ])
 
+    def __checkValidMatrix(self):
+        columnsCount = len(self.rows[0])
+        if not((len(self.rows) == 0) or reduce(lambda x, y: x and y,
+                                              map(lambda x: True if len(x) == columnsCount else False, self.rows))):
+            raise Exception("Matrix entered in an incorrect format.")
+
     def sum(self, matrixB):
-        return Matrix([[self.rows[i][j] + matrixB.rows[i][j] for j in range(len(self.rows[0]))] for i in range(len(self.rows))])
+        if not ((len(self.rows) != len(matrixB.rows)) or (len(self.rows[0]) == len(matrixB.rows[0]))):
+            raise Exception("Matrices do not have the same dimensions.")
+        else:
+            return Matrix([[self.rows[i][j] + matrixB.rows[i][j] for j in range(len(self.rows[0]))] for i in range(len(self.rows))])
 
     def scalar(self, const):
         return Matrix([[self.rows[i][j] * const for j in range(len(self.rows[0]))] for i in range(len(self.rows))])
 
     def prod(self, matrixB):
-        return Matrix([[sum(self.rows[i][k] * matrixB.rows[k][j] for k in range(len(self.rows[0]))) for j in
+        if (len(self.rows[0]) != len(matrixB.rows)):
+            raise Exception("Matrices cannot be multiplicated.")
+        else:
+            return Matrix([[sum(self.rows[i][k] * matrixB.rows[k][j] for k in range(len(self.rows[0]))) for j in
                         range(len(self.rows[0]))] for i in range(len(self.rows))])
 
     def trasp(self):
-        return Matrix([[self.rows[j][i] for j in range(len(self.rows[0]))] for i in range(len(self.rows))])
+        return Matrix([list(i) for i in zip(*self.rows)])
 
     def determinant(self):
         return self.__getDeterminant(self.rows)
@@ -102,11 +114,11 @@ class Matrix(object):
             a matrix with dimensions <height, width> and top left item in <initialX, initialY>.
         '''
 
-        if (len(self.rows) == 0) or (initialX + height > len(self.rows)) or (initialY + width > len(self.rows[0])):
+        if (len(self.rows) == 0) or (initialX + height - 1> len(self.rows)) or (initialY + width - 1> len(self.rows[0])):
             raise Exception('Wrong matrix dimensions.')
         else:
-            selectedRows = list(range(initialX, initialX + height))
-            rowFilteredMat = Matrix([self.rows[i - 1] for i in selectedRows ])
+            selectedRows = list(range(initialX - 1, initialX + height - 1))
+            rowFilteredMat = Matrix([self.rows[i] for i in selectedRows ])
             selectedColumns = list(range(initialY, initialY + width))
             return Matrix([[rowFilteredMat.rows[i][j - 1] for j in selectedColumns ] for i in range(len(rowFilteredMat.rows))  ])
 
