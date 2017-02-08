@@ -34,6 +34,11 @@ class TestMatrix(unittest.TestCase):
         matA = Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
         self.assertTrue(matA.getRows([1, 2, 3]) == [[1, 1, 1]])
 
+    def testGetRowsFail(self):
+        with self.assertRaises(Exception):
+            matA = Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+            matA.getRows([1, 4, 3])
+
     def testAdj(self):
         matA = Matrix([[1, 2, 3], [4, 8, 6], [12, 8, 9]])
         self.assertTrue(matA.adj().getRows([1,2,3]) == [[24, 6, -12], [36, -27, 6], [-64, 16, 0]])
@@ -45,6 +50,11 @@ class TestMatrix(unittest.TestCase):
     def testGetMatrixFromColumn2(self):
         matA = Matrix([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10], [11, 12, 13, 14, 15], [16, 17, 18, 19, 20], [21, 22, 23, 24, 25]])
         self.assertTrue(matA.getMatrixFromColumn(initialX=1, initialY=2, height=2, width=3).getRows([1,2]) == [[2, 3, 4], [7, 8, 9]])
+
+    def testGetMatrixFromColumnFail(self):
+        with self.assertRaises(Exception):
+            matA = Matrix([[1, 2, 3], [4,5,6], [7,8,0]])
+            matA.getMatrixFromColumn(initialX=1, initialY=1, height=-4, width=3)
 
     def testInv(self):
         matA = Matrix([[1, 2, 3], [0, 1, 2], [1, 2, 4]])
@@ -60,6 +70,11 @@ class TestMatrix(unittest.TestCase):
     def testGetColumn(self):
         matA = Matrix([[1, 1, 1, 1, 1], [2, 2, 2, 5, 2], [3, 3, 3, 5, 3], [3, 3, 3, 5, 3], [5, 5, 5, 5, 5]])
         self.assertTrue(matA.getColumns([3,4,5]) == [[1, 2, 3, 3, 5], [1, 5, 5, 5, 5]])
+
+    def testGetColumnFail(self):
+        with self.assertRaises(Exception):
+            matA = Matrix([[1, 1, 1, 1, 1], [2, 2, 2, 5, 2], [3, 3, 3, 5, 3], [3, 3, 3, 5, 3], [5, 5, 5, 5, 5]])
+            matA.getColumns([3,7,5])
 
     def testWrongMatrixDefinedFormat(self):
         with self.assertRaises(Exception):

@@ -7,15 +7,13 @@ from sys import argv
 
 
 def tree(dir, tab, firstLevel=False):
-    '''Get the tree structure.
+    '''Print on the console the tree structure for an specific dir path.
     Args:
         dir: The dir of the root folder.
         tab: The tab caracter used for indent the root structure.
         firstLevel: Flag that indicates where the tree starts.
-
-        Returns:
-            a tree structure cointaining folders and files located on dir.
     '''
+
     files = listdir(dir)
     if firstLevel:
         print "."
@@ -35,7 +33,9 @@ def tree(dir, tab, firstLevel=False):
 
 if __name__ == "__main__":
     #format sample: python PTree.py C:\Users
+    if len(argv) < 1:
+        raise Exception("directory path is needed.")
     dir = argv[1]
     if not os.path.exists(dir):
         raise Exception("directory does not exist.")
-    tree(dir, "", True)
+    a = tree(dir, "", True)

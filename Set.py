@@ -76,8 +76,6 @@ class Set(object):
 
     def pot(self):
         '''Simetric Difference between two sets
-        Args:
-            setB: The set passed as a parameter.
         Returns:
             A list containing the simetric difference between the two sets.
         '''
